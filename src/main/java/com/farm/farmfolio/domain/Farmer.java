@@ -1,9 +1,10 @@
 package com.farm.farmfolio.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Data
