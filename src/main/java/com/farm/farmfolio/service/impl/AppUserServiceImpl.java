@@ -7,7 +7,7 @@ import com.farm.farmfolio.dto.pagination.PaginationDTO;
 import com.farm.farmfolio.dto.pagination.TableResponse;
 import com.farm.farmfolio.service.AppUserService;
 import com.farm.farmfolio.specification.AppUserSpecification;
-import com.farm.farmfolio.specification.MySpec;
+import com.farm.farmfolio.specification.BaseSpecification;
 import com.farm.farmfolio.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,7 +68,7 @@ public class AppUserServiceImpl implements AppUserService {
         TableResponse response;
         Pageable paging = PageRequest.of(pagination.getPageNo() - 1, pagination.getPageSize());
         Page<AppUser> userPage = null;
-        userPage = userDAO.findPagination(MySpec.getSpec(pagination,AppUserSpecification.class),paging);
+        userPage = userDAO.findPagination(BaseSpecification.getSpec(pagination,AppUserSpecification.class),paging);
         if (userPage.hasContent()) {
             List<AppUserDTO> userDTOS = userPage.getContent().stream().map(this::copyToDTO).collect(Collectors.toList());
             response = new TableResponse(0, (int) userPage.getTotalElements(), (int) userPage.getTotalElements(),

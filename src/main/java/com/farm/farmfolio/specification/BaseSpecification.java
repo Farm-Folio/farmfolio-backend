@@ -13,6 +13,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BaseSpecification {
 
@@ -100,6 +103,37 @@ public class BaseSpecification {
             }
             return predicate;
         }
+    }
+
+    public static <T> Specification<T> getSpec(PaginationDTO pagination,Class<T> clazz) {
+        List<SearchCriteria> params = new ArrayList<>();
+        pagination.getFilter().forEach(searchCriteria -> {
+            params.add(searchCriteria);
+        });
+
+        if (params.size() == 0) {
+            return null;
+        }
+
+        List<Specification> specs = params.stream()
+                .map(obj -> {
+                    try { return (Specification) clazz.getDeclaredConstructor(SearchCriteria.class).newInstance(obj); }
+                    catch (Exception e) { e.printStackTrace();}
+                    return null;
+                }).collect(Collectors.toList());
+
+        Specification result = specs.get(0);
+
+        for (int i = 1; i < params.size(); i++) {
+            result = params.get(i)
+                    .isOrPredicate()
+                    ? Specification.where(result)
+                    .or(specs.get(i))
+                    : Specification.where(result)
+                    .and(specs.get(i));
+        }
+
+        return result;
     }
 
 }
