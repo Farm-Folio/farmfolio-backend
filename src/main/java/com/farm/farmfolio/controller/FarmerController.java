@@ -24,17 +24,17 @@ public class FarmerController {
     private FarmerService farmerService;
 
     @PostMapping("/save")
-    ResponseEntity<FarmerDTO> save(@RequestBody FarmerDTO farmerDTO){
+    public ResponseEntity<FarmerDTO> save(@RequestBody FarmerDTO farmerDTO){
         return new ResponseEntity<>(farmerService.save(farmerDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/by-id")
-    ResponseEntity<FarmerDTO> findById(@RequestParam("id") String id){
+    public ResponseEntity<FarmerDTO> findById(@RequestParam("id") String id){
         return new ResponseEntity<>(farmerService.findById(id),HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    ResponseEntity<List<FarmerDTO>> findAll(){
+    public ResponseEntity<List<FarmerDTO>> findAll(){
         return new ResponseEntity<>(farmerService.findAll(),HttpStatus.OK);
     }
 }

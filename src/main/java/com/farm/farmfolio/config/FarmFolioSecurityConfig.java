@@ -1,11 +1,5 @@
 package com.farm.farmfolio.config;
 
-import com.keycloak.connector.security.IAMKeycloakSecurityConfig;
-import org.keycloak.adapters.springsecurity.client.KeycloakClientRequestFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-
 //@Configuration
 //@Order(1)
 public class FarmFolioSecurityConfig  {
