@@ -8,13 +8,14 @@ import javax.persistence.Table;
 
 @Entity
 @Data
-@Table(name = "farmer")
+@Table(name = "app_user")
 @Where(clause = "is_deleted = false")
-public class Farmer extends AuditableBase{
+public class AppUser extends AuditableBase{
     private String name;
     private String lastName;
     private String email;
     private String mobileNumber;
     private Double latitude;
     private Double longitude;
+    private Integer type;
 }
