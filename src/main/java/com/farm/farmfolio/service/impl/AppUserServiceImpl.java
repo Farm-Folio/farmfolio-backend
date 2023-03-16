@@ -65,18 +65,12 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public TableResponse findPagination(PaginationDTO pagination) {
-        TableResponse response;
         Pageable paging = PageRequest.of(pagination.getPageNo() - 1, pagination.getPageSize());
-        Page<AppUser> userPage = null;
-        userPage = userDAO.findPagination(BaseSpecification.getSpec(pagination,AppUserSpecification.class),paging);
-        if (userPage.hasContent()) {
-            List<AppUserDTO> userDTOS = userPage.getContent().stream().map(this::copyToDTO).collect(Collectors.toList());
-            response = new TableResponse(0, (int) userPage.getTotalElements(), (int) userPage.getTotalElements(),
-                    userDTOS);
-        } else {
-            response = new TableResponse(0, (int) userPage.getTotalElements(), (int) userPage.getTotalElements(),
-                    new ArrayList<>());
-        }
-        return response;
+        Page<AppUser> userPage = userDAO.findPagination(BaseSpecification.getSpec(pagination,AppUserSpecification.class),paging);
+        return userPage.hasContent()
+                ? new TableResponse(0, (int) userPage.getTotalElements(), (int) userPage.getTotalElements(),
+                userPage.getContent().stream().map(this::copyToDTO).collect(Collectors.toList()))
+                : new TableResponse(0, (int) userPage.getTotalElements(), (int) userPage.getTotalElements(),
+                new ArrayList<>());
     }
 }

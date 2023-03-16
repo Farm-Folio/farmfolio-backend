@@ -107,23 +107,15 @@ public class BaseSpecification {
 
     public static <T> Specification<T> getSpec(PaginationDTO pagination,Class<T> clazz) {
         List<SearchCriteria> params = new ArrayList<>();
-        pagination.getFilter().forEach(searchCriteria -> {
-            params.add(searchCriteria);
-        });
-
-        if (params.size() == 0) {
-            return null;
-        }
-
+        pagination.getFilter().forEach(searchCriteria -> params.add(searchCriteria));
+        if (params.size() == 0) return null;
         List<Specification> specs = params.stream()
                 .map(obj -> {
                     try { return (Specification) clazz.getDeclaredConstructor(SearchCriteria.class).newInstance(obj); }
-                    catch (Exception e) { e.printStackTrace();}
+                    catch (Exception e) { e.printStackTrace(); }
                     return null;
                 }).collect(Collectors.toList());
-
         Specification result = specs.get(0);
-
         for (int i = 1; i < params.size(); i++) {
             result = params.get(i)
                     .isOrPredicate()
@@ -132,7 +124,6 @@ public class BaseSpecification {
                     : Specification.where(result)
                     .and(specs.get(i));
         }
-
         return result;
     }
 
